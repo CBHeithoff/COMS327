@@ -1,0 +1,6 @@
+    date/time: What I did
+    1/28/2025 1:00 pm: Fixed the bug that was leading to ...
+                       Added the cool feature ...
+
+    use version control: commit messages to CHANGELOG file
+    git log > CHANGELOG
