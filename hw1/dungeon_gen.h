@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 
 #define MAX_x 80
 #define MAX_y 21
@@ -36,6 +37,7 @@ struct room {
     int x_right;
     int y_high;
     int y_low;
+    int connected; // 0 is no, 1 is yes
 };
 
 struct dungeon {
@@ -47,6 +49,7 @@ struct dungeon {
 int dungeon_init(struct dungeon *d);
 int dungeon_print(struct dungeon *d);
 int dungeon_rooms_gen(struct dungeon *d);
+int dungeon_corridor_gen(struct dungeon *d);
 
 
 #endif

@@ -19,5 +19,9 @@ int main(int argc, char *argv[])
 
     dungeon_print(&d);
 
+    dungeon_corridor_gen(&d);
+
+    dungeon_print(&d);
+
     return 0;
 }
