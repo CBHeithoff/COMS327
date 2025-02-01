@@ -40,7 +40,7 @@ int dungeon_rooms_gen(struct dungeon *d)
         d->rooms[r].x_right = d->rooms[r].x_left + d->rooms[r].length - 1;
         d->rooms[r].y_low = d->rooms[r].y_high + d->rooms[r].height - 1;
 
-        printf("x_left: %d and y_high: %d and length: %d and height: %d\n", d->rooms[r].x_left, d->rooms[r].y_high, d->rooms[r].length, d->rooms[r].height);
+        //printf("x_left: %d and y_high: %d and length: %d and height: %d\n", d->rooms[r].x_left, d->rooms[r].y_high, d->rooms[r].length, d->rooms[r].height);
 
         for(i = d->rooms[r].y_high; i <= d->rooms[r].y_low; i++){
             for(j = d->rooms[r].x_left; j <= d->rooms[r].x_right; j++){
@@ -60,7 +60,7 @@ int dungeon_rooms_gen(struct dungeon *d)
             }
         }
         if(!flag){
-            printf("room: %d\n", r);     
+            //printf("room: %d\n", r);     
             for(i = d->rooms[r].y_high; i <= d->rooms[r].y_low; i++){
                 for(j = d->rooms[r].x_left; j <= d->rooms[r].x_right; j++){  
                     d->dungeon[i][j].type = 2;
@@ -121,9 +121,9 @@ int dungeon_corridor_gen(struct dungeon *d)
             closedis = 100.0;
         }
 
-        printf("R1  x_left: %d and y_high: %d and length: %d and height: %d and connected: %d\n", d->rooms[R1].x_left, d->rooms[R1].y_high, d->rooms[R1].length, d->rooms[R1].height, d->rooms[R1].connected);
-        printf("R2  x_left: %d and y_high: %d and length: %d and height: %d and connected: %d\n", d->rooms[R2].x_left, d->rooms[R2].y_high, d->rooms[R2].length, d->rooms[R2].height, d->rooms[R2].connected);
-        printf("Distance: %d\n", (int)closedis);
+        // printf("R1  x_left: %d and y_high: %d and length: %d and height: %d and connected: %d\n", d->rooms[R1].x_left, d->rooms[R1].y_high, d->rooms[R1].length, d->rooms[R1].height, d->rooms[R1].connected);
+        // printf("R2  x_left: %d and y_high: %d and length: %d and height: %d and connected: %d\n", d->rooms[R2].x_left, d->rooms[R2].y_high, d->rooms[R2].length, d->rooms[R2].height, d->rooms[R2].connected);
+        // printf("Distance: %d\n", (int)closedis);
 
         if(d->rooms[R1].length > 4){
             R1x = (rand() % (d->rooms[R1].length - 4)) + d->rooms[R1].x_left + 2;
@@ -146,68 +146,8 @@ int dungeon_corridor_gen(struct dungeon *d)
             R2y = (rand() % (d->rooms[R2].height - 2)) + d->rooms[R2].y_high + 1;
         }
 
-        // if(R2x >= R1x){
-        //     for(i = R1x; i <= R2x; i++){
-        //         if(d->dungeon[R1y][i].type != 2){
-        //             d->dungeon[R1y][i].type = 3;
-        //             d->dungeon[R1y][i].visible = '#';
-        //             d->dungeon[R1y][i].hardness = 0;               
-        //         }
-        //     }
-        //     if(R2y >= R1y){
-        //         for(i = R1y; i <= R2y; i++){
-        //             if(d->dungeon[i][R2x].type != 2){
-        //                 d->dungeon[i][R2x].type = 3;
-        //                 d->dungeon[i][R2x].visible = '#';
-        //                 d->dungeon[i][R2x].hardness = 0;               
-        //             }
-        //         }
-        //     }else{
-        //         for(i = R2y; i <= R1y; i++){
-        //             if(d->dungeon[i][R2x].type != 2){
-        //                 d->dungeon[i][R2x].type = 3;
-        //                 d->dungeon[i][R2x].visible = '#';
-        //                 d->dungeon[i][R2x].hardness = 0;               
-        //             }
-        //         }
-        //     }
-        // }else{
-        //     for(i = R2x; i <= R1x; i++){
-        //         if(d->dungeon[R2y][i].type != 2){
-        //             d->dungeon[R2y][i].type = 3;
-        //             d->dungeon[R2y][i].visible = '#';
-        //             d->dungeon[R2y][i].hardness = 0;               
-        //         }
-        //     }
-        //     if(R2y >= R1y){
-        //         for(i = R1y; i <= R2y; i++){
-        //             if(d->dungeon[i][R1x].type != 2){
-        //                 d->dungeon[i][R1x].type = 3;
-        //                 d->dungeon[i][R1x].visible = '#';
-        //                 d->dungeon[i][R1x].hardness = 0;               
-        //             }
-        //         }
-        //     }else{
-        //         for(i = R2y; i <= R1y; i++){
-        //             if(d->dungeon[i][R1x].type != 2){
-        //                 d->dungeon[i][R1x].type = 3;
-        //                 d->dungeon[i][R1x].visible = '#';
-        //                 d->dungeon[i][R1x].hardness = 0;               
-        //             }
-        //         }
-        //     }
-        // }
-
-        ///////////////////////////////////////////
 
         if(R2x >= R1x){
-            // for(i = R2x; i >= R1x; i--){
-            //     if(d->dungeon[R1y][i].type != 2){
-            //         d->dungeon[R1y][i].type = 3;
-            //         d->dungeon[R1y][i].visible = '#';
-            //         d->dungeon[R1y][i].hardness = 0;               
-            //     }
-            // }
 
             // R2 is below and right of R1
             if(R2y >= R1y){
@@ -291,13 +231,6 @@ int dungeon_corridor_gen(struct dungeon *d)
                 }
             }
         }else{
-            // for(i = R2x; i <= R1x; i++){
-            //     if(d->dungeon[R2y][i].type != 2){
-            //         d->dungeon[R2y][i].type = 3;
-            //         d->dungeon[R2y][i].visible = '#';
-            //         d->dungeon[R2y][i].hardness = 0;               
-            //     }
-            // }
 
             // R2 is below and left of R1
             if(R2y >= R1y){

@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     dungeon_rooms_gen(&d);
 
-    dungeon_print(&d);
+    //dungeon_print(&d);
 
     dungeon_corridor_gen(&d);
 
