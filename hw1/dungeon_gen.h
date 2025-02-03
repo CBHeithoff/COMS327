@@ -50,6 +50,7 @@ int dungeon_init(struct dungeon *d);
 int dungeon_print(struct dungeon *d);
 int dungeon_rooms_gen(struct dungeon *d);
 int dungeon_corridor_gen(struct dungeon *d);
+int dungeon_stair_gen(struct dungeon *d);
 
 
 #endif

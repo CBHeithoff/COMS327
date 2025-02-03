@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
 
     dungeon_corridor_gen(&d);
 
+    dungeon_stair_gen(&d);
+
     dungeon_print(&d);
 
     return 0;

@@ -316,6 +316,38 @@ int dungeon_corridor_gen(struct dungeon *d)
     return 0;
 }
 
+int dungeon_stair_gen(struct dungeon *d)
+{
+    int stairUp, stairDown, x, y, stair3;
+    stairUp = stairDown = 0;
+    // 40% chance of a third stair being generated in the dungeon
+    stair3 = rand() % 5;
+
+    while(stairUp == 0 || (stair3 == 0 && stairUp == 1)){
+        x = rand() % MAX_x;
+        y = rand() % MAX_y;
+        if(d->dungeon[y][x].type == 2 || d->dungeon[y][x].type == 3){
+            d->dungeon[y][x].type = 4;
+            d->dungeon[y][x].visible = '<';
+            d->dungeon[y][x].hardness = 0;
+            stairUp += 1;
+        }
+    }
+
+    while(stairDown == 0 || (stair3 == 1 && stairDown == 1)){
+        x = rand() % MAX_x;
+        y = rand() % MAX_y;
+        if(d->dungeon[y][x].type == 2 || d->dungeon[y][x].type == 3){
+            d->dungeon[y][x].type = 5;
+            d->dungeon[y][x].visible = '>';
+            d->dungeon[y][x].hardness = 0;
+            stairDown += 1;
+        }
+    }
+
+    return 0;
+}
+
 int dungeon_print(struct dungeon *d)
 {
     int i, j;

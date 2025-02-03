@@ -1,11 +1,13 @@
-1/30/2025 6:00 pm: Created a .h, .c, and main.c file for dungeon generation.
-                Defined a dungeon struct, dungeon cell struct, and room struct each with their needed data in the .h file.
-                Defined functions to initialize an empty dungeon, generate rooms in a dungeon, and print out a dungeon to the terminal in the .h file.
-                Completed the dungeon initialization function to set the dungeon boundary and all other cells to rocks.
-                Completed the dungoen print out function to print a given dungeon to the terminal.
+1/30/2025 6:00 pm:  Created a .h, .c, and main.c file for dungeon generation.
+                    Defined a dungeon struct, dungeon cell struct, and room struct each with their needed data (sizes, types, etc.) in the .h file.
+                    Defined functions to initialize an empty dungeon, generate rooms in a dungeon, and print out a dungeon to the terminal in the .h file.
+                    Completed the dungeon initialization function to set the dungeon boundary and all cells to rocks.
+                    Completed the dungoen print out function to print a given dungeon to the terminal.
 
 1/30/2025 11:00 pm: Completed the dungeon room generation function to randomly create 6-9, non-overlapping rooms that are between 4-15 units in the x direction and 3-9 units in the y direction.
 
-1/31/2025 2:00 pm: Completed a simple corridor generation function to connect all rooms.
-                Added randomness to the corridor generation function so corridors are not straight lines, but curve instead
+1/31/2025 2:00 pm:  Completed a simple corridor generation function to connect all rooms.
+                    Added randomness to the corridor generation function so corridors are not straight lines, but curve instead.
+
+2/3/2025 10:00 am:  Completed a function to randomly place between 2-3 staircases in a dungeon.
 
