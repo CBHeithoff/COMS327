@@ -89,9 +89,14 @@ int dungeon_corridor_gen(struct dungeon *d)
     oneCont = 0;
     lastCont = 0;
 
+    // first, the closest two rooms are connected with a corridor.
+    // then the next closed room to the group of already connected rooms are connected.
+    // lastly, in attempt to create a loop in the dungeon, two random rooms are connected.
     for(k = 0; k < d->rooms_num; k++){
         
+        // selecting two rooms
         if(lastCont == 0){
+            // finding closest rooms
             closedis = 100.0;
             for(i = 0; i < d->rooms_num; i++){
                 for(j = 0; j < d->rooms_num; j++){
@@ -113,6 +118,7 @@ int dungeon_corridor_gen(struct dungeon *d)
                 }
             }
         }else{
+            // randomly grabbing two rooms
             R1 = rand() % d->rooms_num;
             R2 = rand() % d->rooms_num;
             while(R1 == R2){
@@ -125,6 +131,10 @@ int dungeon_corridor_gen(struct dungeon *d)
         // printf("R2  x_left: %d and y_high: %d and length: %d and height: %d and connected: %d\n", d->rooms[R2].x_left, d->rooms[R2].y_high, d->rooms[R2].length, d->rooms[R2].height, d->rooms[R2].connected);
         // printf("Distance: %d\n", (int)closedis);
 
+
+        // Once two rooms are selected:
+        // randomly grabbing a position in each room to map corridor path
+        // the position randomness of the position is modify to help corridors curve better
         if(d->rooms[R1].length > 4){
             R1x = (rand() % (d->rooms[R1].length - 4)) + d->rooms[R1].x_left + 2;
         }else{
@@ -146,7 +156,7 @@ int dungeon_corridor_gen(struct dungeon *d)
             R2y = (rand() % (d->rooms[R2].height - 2)) + d->rooms[R2].y_high + 1;
         }
 
-
+        // placing the corridor between room 1 (R1) and room 2 (R2)
         if(R2x >= R1x){
 
             // R2 is below and right of R1
@@ -154,10 +164,11 @@ int dungeon_corridor_gen(struct dungeon *d)
                 curveOff = 0;
                 for(i = R2x; i >= R1x; i--){
                     if(d->dungeon[R1y - curveOff][i].type != 2){
+                        // the very last extra corridor stops if it meet another corridor
                         if(i != R2x && lastCont == 1 && (d->dungeon[R1y - curveOff][i].type == 3 || d->dungeon[R1y - (curveOff + 1)][i].type == 3)){
                             break;
                         }
-                        // 1 in 3 chance of corridor curving
+                        // 1 in 3 chance of corridor curving/turning
                         // as long as curve doesn't make the corridor miss the target room
                         if(rand() % 3 == 0 && (R1y - (curveOff + 1) > d->rooms[R1].y_high) && i != R2x && d->dungeon[R1y - (curveOff + 1)][i].type != 2){
                             d->dungeon[R1y - curveOff][i].type = 3;
@@ -173,6 +184,7 @@ int dungeon_corridor_gen(struct dungeon *d)
                 curveOff = 0;
                 for(i = R1y; i <= R2y; i++){
                     if(d->dungeon[i][R2x + curveOff].type != 2){
+                        // the very last extra corridor stops if it meet another corridor
                         if(i != R1y && lastCont == 1 && (d->dungeon[i][R2x + curveOff].type == 3 || d->dungeon[i][R2x + (curveOff + 1)].type == 3)){
                             break;
                         }
@@ -194,6 +206,7 @@ int dungeon_corridor_gen(struct dungeon *d)
                 curveOff = 0;
                 for(i = R2x; i >= R1x; i--){
                     if(d->dungeon[R1y + curveOff][i].type != 2){
+                        // the very last extra corridor stops if it meet another corridor
                         if(i != R2x && lastCont == 1 && (d->dungeon[R1y + curveOff][i].type == 3 || d->dungeon[R1y + (curveOff + 1)][i].type == 3)){
                             break;
                         }
@@ -213,6 +226,7 @@ int dungeon_corridor_gen(struct dungeon *d)
                 curveOff = 0;
                 for(i = R1y; i >= R2y; i--){
                     if(d->dungeon[i][R2x + curveOff].type != 2){
+                        // the very last extra corridor stops if it meet another corridor
                         if(i != R1y && lastCont == 1 && (d->dungeon[i][R2x + curveOff].type == 3 || d->dungeon[i][R2x + (curveOff + 1)].type == 3)){
                             break;
                         }
@@ -266,7 +280,7 @@ int dungeon_corridor_gen(struct dungeon *d)
                         d->dungeon[i][R1x + curveOff].hardness = 0;               
                     }
                 }
-                // R2 is above and left of R1
+            // R2 is above and left of R1
             }else{
                 curveOff = 0;
                 for(i = R1x; i >= R2x; i--){
@@ -303,16 +317,17 @@ int dungeon_corridor_gen(struct dungeon *d)
             }
         }
 
+        // indicating the rooms are connected
         oneCont = 1;
         d->rooms[R1].connected = 1;
         d->rooms[R2].connected = 1;
+        // indicating the next corridor is the last/special generated corridor
         if(k == d->rooms_num - 2){
             lastCont = 1;
         }
         
     }
     
-
     return 0;
 }
 

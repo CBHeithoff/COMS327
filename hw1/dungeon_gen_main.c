@@ -9,9 +9,7 @@ int main(int argc, char *argv[])
 
     srand(time(NULL));  
 
-    if(dungeon_init(&d)){
-        return 0;
-    }
+    dungeon_init(&d);
 
     //dungeon_print(&d);
 
