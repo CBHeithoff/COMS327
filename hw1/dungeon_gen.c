@@ -9,9 +9,13 @@ int dungeon_init(struct dungeon *d)
     for(i = 0; i < MAX_y; i++){
         for(j = 0; j < MAX_x; j++){
             //printf("i and j: %d %d\n", i, j);
-            if((i == 0) || (i == MAX_y - 1) || (j == 0) || (j == MAX_x -1)){
+            if((i == 0) || (i == MAX_y - 1)){
                 d->dungeon[i][j].type = 0;
-                d->dungeon[i][j].visible = 'W';
+                d->dungeon[i][j].visible = '-';
+                d->dungeon[i][j].hardness = 100;
+            }else if((j == 0) || (j == MAX_x -1)){
+                d->dungeon[i][j].type = 0;
+                d->dungeon[i][j].visible = '|';
                 d->dungeon[i][j].hardness = 100;
             }else{
                 d->dungeon[i][j].type = 1;
@@ -31,7 +35,7 @@ int dungeon_rooms_gen(struct dungeon *d)
     r = 0;
     extra_rooms = rand() % 4;
 
-    while(r < (6 + extra_rooms)){
+    while(r < (7 + extra_rooms)){
         flag = 0;
         d->rooms[r].x_left = rand() % MAX_x;
         d->rooms[r].y_high = rand() % MAX_y;

@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include "queue.h" // do a relative search in the local directory
 
-int queue_init(struct queue *q)
+//int queue_init(struct queue *q)
+int queue_init(queue *q)
 {
+    
+    //q->front = q->back = (void *) 1; // causes crash
     q->front = q->back = NULL;
     q->length = 0;
 

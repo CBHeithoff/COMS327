@@ -1,0 +1,21 @@
+Debug command: 
+    gdb <binary_file> 
+        good for program crashes
+    run - to run
+    print <variable>
+    bt - backtrack to see values before the crash
+        probably crash in library, move up to your code
+    up/down - move through stack track
+    start - run with breakpoint at main
+    continue/(s)tep/(n)ext - step goes inside function calls one line at a time
+    break queue_enqueue <function>
+    print *<struct> - see data in struct
+    list - list function list maybe
+
+Debug command:
+    valgrind ./<executable>
+        good for unseen bugs
+    runs program in sandbox
+    can find memory leaks
+    say yes if valgrind says to run another command, more info
+    valgrind --leak-check=full --show-leak-kinds=all --track-origin=yes --logfile=<file_name> ./<executable>
