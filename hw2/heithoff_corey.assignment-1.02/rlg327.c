@@ -709,7 +709,8 @@ void render_dungeon(dungeon_t *d)
         putchar(' ');
         break;
       case ter_wall_immutable:
-        putchar('W');
+        //putchar('W');
+        putchar(' ');
         break;
       case ter_floor:
       case ter_floor_room:
@@ -755,7 +756,7 @@ int load_dungeon(dungeon_t *d)
   uint8_t r_x, r_y, size_x, size_y, pc_x, pc_y;
   uint8_t byte1;
   uint16_t byte2;
-  uint32_t byte4;//, fver, fsize;
+  uint32_t byte4;//, fver, fsize; // fver and fsize are for debugging
 
   FILE *f;
 
@@ -763,13 +764,14 @@ int load_dungeon(dungeon_t *d)
   char *dungeon_file;
   int dungeon_file_length;
 
+  // opening dungeon file
   home = getenv("HOME");
   dungeon_file_length = strlen(home) + strlen("/.rlg327/dungeon") + 1; // +1 for the null byte
-  //dungeon_file_length = strlen(home) + strlen("/.rlg327/02.rlg327") + 1; 
+  //dungeon_file_length = strlen(home) + strlen("/.rlg327/01.rlg327") + 1; 
   dungeon_file = malloc(dungeon_file_length * sizeof (*dungeon_file));
   strcpy(dungeon_file, home);
   strcat(dungeon_file, "/.rlg327/dungeon");
-  //strcat(dungeon_file, "/.rlg327/02.rlg327");
+  //strcat(dungeon_file, "/.rlg327/01.rlg327");
   // Now you can fopen() dungeon_file for reading or writing as needed
   if(!(f = fopen(dungeon_file, "rb"))){
     return -1;
@@ -777,7 +779,12 @@ int load_dungeon(dungeon_t *d)
 
   // file-type marker
   for (int i = 0; i < 12; i++) {
-    fread(&byte1, sizeof(byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
+
+    // debugging
     // printf("%c", byte1); // Print as character
   }
   // printf("\n");
@@ -785,21 +792,35 @@ int load_dungeon(dungeon_t *d)
   fseek(f, 12, SEEK_SET);
 
   // file version
-  fread(&byte4, sizeof (byte4), 1, f);
-  //fver = be32toh(byte4);
+  if(fread(&byte4, sizeof (byte4), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
+  // debugging
+  // fver = be32toh(byte4);
   // printf("file version #: %d\n", fver);
 
   // file size
-  fread(&byte4, sizeof (byte4), 1, f);
-  //fsize = be32toh(byte4);
+  if(fread(&byte4, sizeof (byte4), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
+  // debugging
+  // fsize = be32toh(byte4);
   // printf("file size: %d\n", fsize);
 
   fseek(f, 20, SEEK_SET);
 
   // PC position
-  fread(&byte1, sizeof (byte1), 1, f);
+  if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
   pc_x = byte1;
-  fread(&byte1, sizeof (byte1), 1, f);
+  if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
   pc_y = byte1;
 
   // debugging
@@ -812,7 +833,10 @@ int load_dungeon(dungeon_t *d)
   for(i = 0; i < DUNGEON_X * DUNGEON_Y; i++){
     row = i / DUNGEON_X;   
     col = i % DUNGEON_X;  
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     d->hardness[row][col] = byte1;
     d->map[row][col] = ter_wall;
   }
@@ -826,7 +850,10 @@ int load_dungeon(dungeon_t *d)
   // }
 
   // Number of rooms
-  fread(&byte2, sizeof (byte2), 1, f);
+  if(fread(&byte2, sizeof(byte2), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
   rooms = be16toh(byte2);
   d->num_rooms = rooms;
   
@@ -840,13 +867,25 @@ int load_dungeon(dungeon_t *d)
   // room position and size
   for(r = 0; r < rooms; r++){
 
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     r_x = byte1;
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     r_y = byte1;
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     size_x = byte1;
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     size_y = byte1;
 
     d->rooms[r].position[dim_x] = r_x;
@@ -867,7 +906,10 @@ int load_dungeon(dungeon_t *d)
 
   // number of upward staircases
   uint16_t upstair;
-  fread(&byte2, sizeof (byte2), 1, f);
+  if(fread(&byte2, sizeof(byte2), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
   upstair = be16toh(byte2);
 
   // debugging
@@ -875,9 +917,15 @@ int load_dungeon(dungeon_t *d)
 
   // upward staircase positions
   for(r = 0; r < upstair; r++){
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     r_x = byte1;
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     r_y = byte1;
 
     d->map[r_y][r_x] = ter_stairs_up;
@@ -885,7 +933,10 @@ int load_dungeon(dungeon_t *d)
 
   // number of downward staircases
   uint16_t downstair;
-  fread(&byte2, sizeof (byte2), 1, f);
+  if(fread(&byte2, sizeof(byte2), 1, f) != 1){
+    fclose(f);
+    return -2;
+  }
   downstair = be16toh(byte2);
   
   // debugging
@@ -893,9 +944,15 @@ int load_dungeon(dungeon_t *d)
 
   // downward staircase positions
   for(r = 0; r < downstair; r++){
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     r_x = byte1;
-    fread(&byte1, sizeof (byte1), 1, f);
+    if(fread(&byte1, sizeof(byte1), 1, f) != 1){
+      fclose(f);
+      return -2;
+    }
     r_y = byte1;
 
     d->map[r_y][r_x] = ter_stairs_down;
@@ -915,7 +972,9 @@ int load_dungeon(dungeon_t *d)
   }
 
   // placing PC '@'
-  d->map[pc_y][pc_x] = ter_pc;
+  if(d->map[pc_y][pc_x] != ter_wall_immutable){
+    d->map[pc_y][pc_x] = ter_pc;
+  }
 
   fclose(f);
   return 0;
@@ -934,53 +993,35 @@ int save_dungeon(dungeon_t *d)
   char *dungeon_file;
   int dungeon_file_length;
 
-  // printf("test0");
-
   home = getenv("HOME");
   dungeon_file_length = strlen(home) + strlen("/.rlg327/dungeon") + 1; // +1 for the null byte
-  //dungeon_file_length = strlen(home) + strlen("/.rlg327/dungeon") + 1; 
   dungeon_file = malloc(dungeon_file_length * sizeof (*dungeon_file));
   strcpy(dungeon_file, home);
   strcat(dungeon_file, "/.rlg327/dungeon");
-  //strcat(dungeon_file, "/.rlg327/dungeon");
   // Now you can fopen() dungeon_file for reading or writing as needed
   if(!(f = fopen(dungeon_file, "wb"))){
-    return -1;;
+    return -1;
   }
-  // printf("test");
 
   // semantic file-type marker
   fseek(f, 0, SEEK_SET);
-  byte1 = 'R';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = 'L';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = 'G';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '3';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '2';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '7';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '-';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = 'S';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '2';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '0';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '2';
-  fwrite(&byte1, sizeof (byte1), 1, f);
-  byte1 = '5';
-  fwrite(&byte1, sizeof (byte1), 1, f);
+
+  const char mkr[] = "RLG327-S2025";
+  for (size_t i = 0; i < sizeof(mkr) - 1; i++) {
+    byte1 = mkr[i];
+    if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+      fclose(f);
+      return -2;
+    }
+  }
+
   // file version marker
   fseek(f, 12, SEEK_SET);
   byte4 = htobe32(0);
-  fwrite(&byte4, sizeof (byte4), 1, f);
-
-  // printf("test2");
+  if (fwrite(&byte4, sizeof(byte4), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
 
   // calculating some values
   r = d->num_rooms;
@@ -1003,16 +1044,24 @@ int save_dungeon(dungeon_t *d)
   // printf("file size: %d\n", fsize);
   fseek(f, 16, SEEK_SET);
   byte4 = htobe32(fsize);
-  fwrite(&byte4, sizeof (byte4), 1, f);
+  if (fwrite(&byte4, sizeof(byte4), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
 
   // PC position
   byte1 = pc_x;
   // printf("pc_x: %d\n", byte1);
-  fwrite(&byte1, sizeof (byte1), 1, f);
+  if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
   byte1 = pc_y;
   // printf("pc_y: %d\n", byte1);
-  fwrite(&byte1, sizeof (byte1), 1, f);
-
+  if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
 
   // Debugging
   // for (i = 0; i < DUNGEON_Y; i++) {
@@ -1027,56 +1076,91 @@ int save_dungeon(dungeon_t *d)
   for(i = 0; i < DUNGEON_Y; i++){
     for(j = 0; j < DUNGEON_X; j++){
       byte1 = d->hardness[i][j];
-      //printf("hardness: %d\n", byte1);
-      fwrite(&byte1, sizeof (byte1), 1, f);
+      if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+        fclose(f);
+        return -2;
+      }
     }
   }
 
   // number of rooms
   byte2 = htobe16(r);
-  fwrite(&byte2, sizeof (byte2), 1, f);
+  if (fwrite(&byte2, sizeof(byte2), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
 
   // room position and sizes
   fseek(f, 1704, SEEK_SET);
   for(i = 0; i < d->num_rooms; i++){
     byte1 = d->rooms[i].position[dim_x];
-    fwrite(&byte1, sizeof (byte1), 1, f);
+    if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+      fclose(f);
+      return -2;
+    }
     byte1 = d->rooms[i].position[dim_y];
-    fwrite(&byte1, sizeof (byte1), 1, f);
+    if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+      fclose(f);
+      return -2;
+    }
     byte1 = d->rooms[i].size[dim_x];
-    fwrite(&byte1, sizeof (byte1), 1, f);
+    if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+      fclose(f);
+      return -2;
+    }
     byte1 = d->rooms[i].size[dim_y];
-    fwrite(&byte1, sizeof (byte1), 1, f);
+    if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+      fclose(f);
+      return -2;
+    }
   }
 
   // number of upward staircases
   byte2 = htobe16(up);
-  fwrite(&byte2, sizeof (byte2), 1, f);
+  if (fwrite(&byte2, sizeof(byte2), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
 
   // upward staircase positions
   for(i = 0; i < DUNGEON_Y; i++){
     for(j = 0; j < DUNGEON_X; j++){
       if(d->map[i][j] == ter_stairs_up){
         byte1 = j;
-        fwrite(&byte1, sizeof (byte1), 1, f);
+        if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+          fclose(f);
+          return -2;
+        }
         byte1 = i;
-        fwrite(&byte1, sizeof (byte1), 1, f);
+        if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+          fclose(f);
+          return -2;
+        }
       }
     }
   }
 
   // number of downward staircases
   byte2 = htobe16(dn);
-  fwrite(&byte2, sizeof (byte2), 1, f);
+  if (fwrite(&byte2, sizeof(byte2), 1, f) != 1) {
+    fclose(f);
+    return -2;
+  }
 
   // downward staircase positions
   for(i = 0; i < DUNGEON_Y; i++){
     for(j = 0; j < DUNGEON_X; j++){
       if(d->map[i][j] == ter_stairs_down){
         byte1 = j;
-        fwrite(&byte1, sizeof (byte1), 1, f);
+        if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+          fclose(f);
+          return -2;
+        }
         byte1 = i;
-        fwrite(&byte1, sizeof (byte1), 1, f);
+        if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
+          fclose(f);
+          return -2;
+        }
       }
     }
   }
@@ -1091,38 +1175,53 @@ int main(int argc, char *argv[])
   dungeon_t d;
   struct timeval tv;
   uint32_t seed;
-  int i;
+  int i, result, save, load;
+  save = load = result = 0;
 
   UNUSED(in_room);
 
+  // checking for switches and calculating seed
   if (argc > 1) {
-    seed = atoi(argv[1]);
-    // if(seed == 0 && strcmp(argv[1], "--save")){
-    //   gettimeofday(&tv, NULL);
-    //   seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
-    // }
-  }else {
+    for (i = 1; i < argc; i++) {
+      if (strcmp(argv[i], "--save") == 0) {
+        save = 1;
+      }
+      if (strcmp(argv[i], "--load") == 0) {
+        load = 1;
+      }
+    }
+    for (i = 1; i < argc; i++) {
+      seed = atoi(argv[i]);
+      if (seed != 0 || (seed == 0 && isdigit(argv[i][0]))) {
+        // seed is in proper form
+        break;
+      } else if(!load) {
+        gettimeofday(&tv, NULL);
+        seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
+      }
+    }
+  }else{
     gettimeofday(&tv, NULL);
     seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
   }
 
-
   printf("Using seed: %u\n", seed);
   srand(seed);
 
-  int save_flag = 0, load_flag = 0;
-
-  for (i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "--save") == 0) {
-      save_flag = 1;
+  // loading or generating
+  if(load){
+    result = load_dungeon(&d);
+    
+    // error handling
+    if(result == -1){
+      fprintf(stderr, "Error: Failed to open dungeon file.\n");
+      delete_dungeon(&d);
+      return 0;
+    }else if(result == -2){
+      fprintf(stderr, "Error: Failed to read dungeon file data.\n");
+      delete_dungeon(&d);
+      return 0;
     }
-    if (strcmp(argv[i], "--load") == 0) {
-      load_flag = 1;
-    }
-  }
-
-  if(load_flag){
-    load_dungeon(&d);
   }else{
     init_dungeon(&d);
     gen_dungeon(&d);
@@ -1130,13 +1229,23 @@ int main(int argc, char *argv[])
 
   render_dungeon(&d);
 
-  if(save_flag){
-    int res = 0;
-    printf("pretest");
-    res = save_dungeon(&d);
-    printf("save result: %d", res);
+  // saving if needed
+  if(save){
+    result = save_dungeon(&d);
+
+    // error handling
+    if(result == -1){
+      fprintf(stderr, "Error: Failed to open dungeon save file.\n");
+      delete_dungeon(&d);
+      return 0;
+    }else if(result == -2){
+      fprintf(stderr, "Error: Failed to save dungeon file data.\n");
+      delete_dungeon(&d);
+      return 0;
+    }
   }
 
+  // deallocating dungeon room array
   delete_dungeon(&d);
 
   return 0;

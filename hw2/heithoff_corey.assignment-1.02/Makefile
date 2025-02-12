@@ -3,7 +3,7 @@ CXX = g++
 ECHO = echo
 RM = rm -f
 
-TERM = "S2021"
+TERM = "S2025"
 
 CFLAGS = -Wall -Werror -ggdb -funroll-loops -DTERM=$(TERM)
 CXXFLAGS = -Wall -Werror -ggdb -funroll-loops -DTERM=$(TERM)
