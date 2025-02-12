@@ -18,4 +18,4 @@ Debug command:
     runs program in sandbox
     can find memory leaks
     say yes if valgrind says to run another command, more info
-    valgrind --leak-check=full --show-leak-kinds=all --track-origin=yes --logfile=<file_name> ./<executable>
+    valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --logfile=<file_name> ./<executable>

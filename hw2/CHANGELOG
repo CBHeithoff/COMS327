@@ -1,0 +1,14 @@
+2/10/25 12:30 PM: Started hw2 by downloading the post-hw1 code the professor sent out.
+                    Created a load_dungeon function that opened a file at the correct path.
+                    Added implementation to set the hardness and place the rooms.
+
+2/11/25 5:00 PM: Added implementation in the load_dungeon function to staircases, walls/rocks, and the PC '@'.
+                    Tested the load_dungeon function on all the given dungeon saves and all passed.
+
+2/11/25 8:00 PM: Created a save_dungeon function to write the file-type marker, version marker, and file size.
+                    Implementated the dynamically sized array to keep track of the rooms.
+
+2/11/25 11:00 PM: Added implementation in save_dungeon to write pc position, cell hardness, # of rooms, position of rooms
+                    Added save_dungeon to write up and down staircases
+                    Tested using both --save and --load, found bug with loop index in save_dungeon
+                    first version of --save and --load are working

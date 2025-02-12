@@ -1,8 +1,0 @@
-2/10/25 12:30 PM: Started hw2 by downloading the post-hw1 code the professor sent out.
-                    Created a load_dungeon function that opened a file at the correct path.
-                    Added implementation to set the hardness and place the rooms.
-
-2/11/25 5:00 PM: Added implementation in the load_dungeon function to staircases, walls/rocks, and the PC '@'.
-                    Tested the load_dungeon function on all the given dungeon saves and all passed.
-
-2/11/25 8:00 PM: Created a save_dungeon function
