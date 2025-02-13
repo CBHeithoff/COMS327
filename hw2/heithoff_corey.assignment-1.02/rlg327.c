@@ -776,6 +776,7 @@ int load_dungeon(dungeon_t *d)
   if(!(f = fopen(dungeon_file, "rb"))){
     return -1;
   }
+  free(dungeon_file);
 
   // file-type marker
   for (int i = 0; i < 12; i++) {
@@ -1002,9 +1003,10 @@ int save_dungeon(dungeon_t *d)
   if(!(f = fopen(dungeon_file, "wb"))){
     return -1;
   }
+  free(dungeon_file);
 
   // semantic file-type marker
-  fseek(f, 0, SEEK_SET);
+  //fseek(f, 0, SEEK_SET);
 
   const char mkr[] = "RLG327-S2025";
   for (size_t i = 0; i < sizeof(mkr) - 1; i++) {
@@ -1016,7 +1018,7 @@ int save_dungeon(dungeon_t *d)
   }
 
   // file version marker
-  fseek(f, 12, SEEK_SET);
+  //fseek(f, 12, SEEK_SET);
   byte4 = htobe32(0);
   if (fwrite(&byte4, sizeof(byte4), 1, f) != 1) {
     fclose(f);
@@ -1042,7 +1044,7 @@ int save_dungeon(dungeon_t *d)
   // file size
   fsize = 12 + 4 + 4 + 2 + 1680 + 2 + (r * 4) + 2 + (up * 2) + 2 + (dn * 2);
   // printf("file size: %d\n", fsize);
-  fseek(f, 16, SEEK_SET);
+  //fseek(f, 16, SEEK_SET);
   byte4 = htobe32(fsize);
   if (fwrite(&byte4, sizeof(byte4), 1, f) != 1) {
     fclose(f);
@@ -1072,7 +1074,7 @@ int save_dungeon(dungeon_t *d)
   // }
 
   // cell hardness
-  fseek(f, 22, SEEK_SET);
+  //fseek(f, 22, SEEK_SET);
   for(i = 0; i < DUNGEON_Y; i++){
     for(j = 0; j < DUNGEON_X; j++){
       byte1 = d->hardness[i][j];
@@ -1091,7 +1093,7 @@ int save_dungeon(dungeon_t *d)
   }
 
   // room position and sizes
-  fseek(f, 1704, SEEK_SET);
+  //fseek(f, 1704, SEEK_SET);
   for(i = 0; i < d->num_rooms; i++){
     byte1 = d->rooms[i].position[dim_x];
     if (fwrite(&byte1, sizeof(byte1), 1, f) != 1) {
