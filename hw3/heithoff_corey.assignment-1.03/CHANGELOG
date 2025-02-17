@@ -1,0 +1,43 @@
+1/30/2025 6:00 pm:  Started assignment 1
+                    Created a .h, .c, and main.c file for dungeon generation.
+                    Defined a dungeon struct, dungeon cell struct, and room struct each with their needed data (sizes, types, etc.) in the .h file.
+                    Defined functions to initialize an empty dungeon, generate rooms in a dungeon, and print out a dungeon to the terminal in the .h file.
+                    Started and completed the dungeon initialization function to set the dungeon immutable boundary and all cells to rocks.
+                    Started and Completed the dungeon print out function to print a given dungeon to the terminal.
+
+1/30/2025 11:00 pm: Started and completed the dungeon room generation function to randomly create 7-10, non-overlapping rooms that are between 4-15 units in the x direction and 3-9 units in the y direction.
+
+1/31/2025 2:00 pm:  Started and completed a simple corridor generation function to connect all rooms.
+                    Added randomness to the corridor generation function so corridors are not straight lines, but curve instead.
+
+2/3/2025 10:00 am:  Started and completed a function to randomly place between 2-3 staircases in a dungeon.
+
+2/3/2025 4:00 pm:   Added some documenation and finished the README description.
+
+2/4/2025 5:00 pm:   Changed up the Makefile to follow the example in lecture before submission.
+
+
+
+2/10/25 12:30 PM:   Started assignment 2
+                    Started hw2 by downloading the post-hw1 code the professor sent out.
+                    Created a load_dungeon function that opened a file at the correct path.
+                    Added implementation to set the hardness and place the rooms.
+
+2/11/25 5:00 PM:    Added implementation in the load_dungeon function to staircases, walls/rocks, and the PC '@'.
+                    Tested the load_dungeon function on all the given dungeon saves and all passed.
+
+2/11/25 8:00 PM:    Created a save_dungeon function to write the file-type marker, version marker, and file size.
+                    Implementated the dynamically sized array to keep track of the rooms.
+
+2/11/25 11:00 PM:   Added implementation in save_dungeon to write pc position, cell hardness, # of rooms, position of rooms.
+                    Added save_dungeon to write up and down staircases.
+                    Tested using both --save and --load, found bug with loop index in save_dungeon.
+                    first version of --save and --load are working.
+
+2/12/25 2:00 PM:    Fixed an issue with a seed not being generated when using --save option.
+                    Combined CHANGELOG for hw1 and hw2 to align with sylabus instructions.
+                    Added error handling for if a file isn't opened correctly or a fread/fwrite fails.
+                    Created the README description for hw2.
+                    Fixed a bug with dungeon not saving when trying to save dungeon with a specific seed.
+
+2/12/25 5:30 PM:    Cleaned and packaged directory for submission.

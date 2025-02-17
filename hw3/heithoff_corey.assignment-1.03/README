@@ -1,0 +1,10 @@
+Assignment 1.02 involves the functionality to load and save dungeons to disk using the switches, --save and --load. My implementation is built from the professor's solution for assignment 1.01, which came with the files heap.c, heap.h, rlg327.c, and a Makefile. I did not alter heap.c and heap.h, and slightly altered the Makefile, so the execution is: "./rlg327 [seed] [--load|--save]". Most of my implementation of load and save is in the bottom half of rlg327.c, specifically within main() and the new functions:
+
+    int load_dungeon(dungeon_t *d)
+    int save_dungeon(dungeon_t *d)
+    static int allocate_rooms(dungeon_t *d)
+    static void destroy_rooms(dungeon_t *d)
+
+The allocate_rooms function will dynamically allocate the dungeon's room array according to how many rooms are in the dungeon. The dungeon struct and gen_dungeon function were modified to incorporate this change. Destroy_rooms deallocates the room array. 
+
+Load_dungeon opens the binary file at the home directory + /.rlg327/dungeon. It uses fread() to read individual/groups of bytes and passes the data in the dungeon struct including the hardness, PC, rooms, and staircases. The location of rocks and corridors can be inferred based on the data. Save_dungeon opens the same file and uses fwrite() to write the bytes of dungeon data into the file according to the format. The file is in big-endian order. There is error handling for all fopen(), fread(), and fwrite() functions. If a dungeon is loaded from disk, the displayed seed is 0.
