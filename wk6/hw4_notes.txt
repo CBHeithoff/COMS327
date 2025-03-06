@@ -1,0 +1,46 @@
+redisplay happens at the beginning of the player characters turn.
+
+The turn queue:
+
+Every character has a speed.
+The PC's (player character) speed is 100. This is "normal speed"
+Other characters (monsters) may have other speeds.
+Lower speeds are faster. 
+    Speed is how long it takes a character to perform a job.
+
+Place all characters in a priority queue, sorted by "next turn" with a secondary sort on a sequence number.
+When the game starts, everybody has a next turn of 0.
+After a character moves, next turn is updated to current turn + speed
+
+Char        Speed       SN      NT
+@           100         0       0 -> 100 -> 200
+A           100         1       0 -> 100 -> 200
+B           50          2       0 -> 50 -> 100 -> 150 -> 200
+C           200         3       0 -> 200
+D           90          4       0 -> 90 -> 180 -> 270
+E           110         5       0 -> 110 -> 220
+F           100         6       0 -> 100 -> 200
+
+Pulls out @ and update map, this is the time to move PC.
+Character B is first to have second turn, then D.
+Then PC moves, but B has already gone twice.
+
+current game time is always the next turn of character that was last removed from the heap! This is, next turn *before* updating!
+
+Simulation of this sort are call discrete event simulators. There is no need to keep track of the game time. It's implicit in the NT. Time is slipped when nothing is happening!
+
+
+Make a character map or actually a pointer map where each cell is NULL or a pointer to the character info. Character info is malloc, has symbol info, etc.
+Turn queue also gets pointers to characters.
+
+
+--------------------
+
+
+monster's line of sight
+
+in the same room is an option (hallways are dark)
+some rezihand algorithm to draw lines in a caritenson plane
+recursion shadow casting
+
+    record last known location of PC
