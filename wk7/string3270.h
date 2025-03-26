@@ -1,6 +1,12 @@
 #ifndef STRING3270_H
 #define STRING3270_H
 
+#include <string.h>
+#include <iostream>
+
+// dont use namespace
+//using namespace std;
+
 // C
 // typedef class string {
     // private int foo;
@@ -12,43 +18,43 @@ class string3270 {
     // private by default
     // all following is private to class
     private:
-        char *string
+        char *str;
     
     // anyone can use it
     public: 
         // default constructor doesn't need return type (not a method technically)
         string3270(); 
-        string3270(const char *);
-        string3270(const string3270 &);
+        string3270(const char *s);
+        string3270(const string3270 &s);
         // deconstructor because no garbage collector
         ~string3270();
 
-        bool operator==(const string3270 &);
-        bool operator!=(const string3270 &);
-        bool operator>=(const string3270 &);
-        bool operator<=(const string3270 &);
-        bool operator>(const string3270 &);
-        bool operator<(const string3270 &);
+        bool operator==(const string3270 &s) const;
+        bool operator!=(const string3270 &s) const;
+        bool operator>=(const string3270 &s) const;
+        bool operator<=(const string3270 &s) const;
+        bool operator>(const string3270 &s) const;
+        bool operator<(const string3270 &s) const;
 
-        string3270 &operator=(const string3270 &);
-        string3270 &operator=(const char *);
-        string3270 &operator+=(const string3270 &);
-        string3270 &operator+=(const char *);
-        string3270 operator+(const string3270 &);
-        string3270 operator+(const char *);
+        string3270 &operator=(const string3270 &s);
+        string3270 &operator=(const char *s);
+        string3270 &operator+=(const string3270 &s);
+        string3270 &operator+=(const char *s);
+        string3270 operator+(const string3270 &s) const;
+        string3270 operator+(const char *s) const;
 
         int length();
         // indexing
-        char &operator[](int i);
-        const char *c_str();
+        char &operator[](int i) const;
+        const char *c_str() const;  // const at end of function signature says that 'this' is constant
     
         // Friends have access to our privates
-        friend istream &operator>>(istream & const string3270 &);
+        friend istream &operator>>(std::istream &i, const string3270 &s);
 
 };
 
 // needs to be outside of the class (don't have access to private elements)
-ostream &operator<<(ostream & const string3270 &);
+ostream &operator<<(std::ostream &o, const string3270 &s);
 
 /*
     Operator overloading
