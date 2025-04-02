@@ -1,0 +1,153 @@
+1/30/25 6:00 pm:    Started assignment 1
+                    Created a .h, .c, and main.c file for dungeon generation.
+                    Defined a dungeon struct, dungeon cell struct, and room struct each with their needed data (sizes, types, etc.) in the .h file.
+                    Defined functions to initialize an empty dungeon, generate rooms in a dungeon, and print out a dungeon to the terminal in the .h file.
+                    Started and completed the dungeon initialization function to set the dungeon immutable boundary and all cells to rocks.
+                    Started and Completed the dungeon print out function to print a given dungeon to the terminal.
+
+1/30/25 11:00 pm:   Started and completed the dungeon room generation function to randomly create 7-10, non-overlapping rooms that are between 4-15 units in the x direction and 3-9 units in the y direction.
+
+1/31/25 2:00 pm:    Started and completed a simple corridor generation function to connect all rooms.
+                    Added randomness to the corridor generation function so corridors are not straight lines, but curve instead.
+
+2/3/25 10:00 am:    Started and completed a function to randomly place between 2-3 staircases in a dungeon.
+
+2/3/25 4:00 pm:     Added some documenation and finished the README description.
+
+2/4/25 5:00 pm:     Changed up the Makefile to follow the example in lecture before submission.
+
+
+
+2/10/25 12:30 PM:   Started assignment 2 (hw2)
+                    Started hw2 by downloading the post-hw1 code the professor sent out.
+                    Created a load_dungeon function that opened a file at the correct path.
+                    Added implementation to set the hardness and place the rooms.
+
+2/11/25 5:00 PM:    Added implementation in the load_dungeon function to staircases, walls/rocks, and the PC '@'.
+                    Tested the load_dungeon function on all the given dungeon saves and all passed.
+
+2/11/25 8:00 PM:    Created a save_dungeon function to write the file-type marker, version marker, and file size.
+                    Implementated the dynamically sized array to keep track of the rooms.
+
+2/11/25 11:00 PM:   Added implementation in save_dungeon to write pc position, cell hardness, # of rooms, position of rooms.
+                    Added save_dungeon to write up and down staircases.
+                    Tested using both --save and --load, found bug with loop index in save_dungeon.
+                    first version of --save and --load are working.
+
+2/12/25 2:00 PM:    Fixed an issue with a seed not being generated when using --save option.
+                    Combined CHANGELOG for hw1 and hw2 to align with sylabus instructions.
+                    Added error handling for if a file isn't opened correctly or a fread/fwrite fails.
+                    Created the README description for hw2.
+                    Fixed a bug with dungeon not saving when trying to save dungeon with a specific seed.
+
+2/12/25 5:30 PM:    Cleaned and packaged directory for submission.
+
+
+
+2/16/25 1:00 PM:    Started assignment 1.03 (hw3)
+                    Created a place_pc() to place the PC in a proper position on generated dungeon maps.
+                    Defined a dijkstra_path() using the dijkstra_corridor() as a base.
+                    Modified dijkstra_path() to only require the PC position rather than a start to finish distination, only add room and corridor cells as nodes to the queue, consider a wreight of 1 for all cells in question, observe all nodes until the queue is empty, and check/compare costs of the surrounding 8 nodes of each node.
+                    
+2/16/25 7:00 PM:    Modified dijkstra_path() to output the resulting distance map.            
+                    Tested completed dijkstra_path() to the given distance map examples in piazza with success.
+
+2/17/25 12:30 PM    Defined dijkstra_path_tunneling() using dijkstra_path() as a base.
+                    Modified dijkstra_path_tunneling() to include rocks as nodes in the queue, determine cell cost with the weight equation given in the instructions, and print out its distance map.
+                    Tested dijkstra_path_tunneling() with given distance maps and found slight errors.
+                                     
+2/17/25 8:00 PM     Debugged and found that I implemented the cell weight equation incorrectly needing a quick fix.
+                    Finished dijkstra_path_tunneling() and tested with success
+
+2/17/25 11:30 PM    Wrote some documentation and the README.
+
+2/19/25 6:30 PM     Finished the README then cleaned and packaged directory for submission.
+                    
+
+
+3/3/25 1:00 PM:     Started assignment 1.04 (hw4)
+                    Started hw4 by downloading the post-hw3 code the professor sent out.
+                    Defined monster characteristics and monster_is() as seen in lecture.
+                    Added table of pointers called characters to hold monsters in the dungeon struct.
+                    Defined a monster struct with parameters including position, pc_position, characteristics, symbol, speed, seq_num, next_turn, and heap node pointer. Also added a few of these parameters to the PC struct (speed, seq_num, next_turn).
+                    Created int gen_character() function to randomly create and place the given amount of monsters (--nummon or default 10) in the character array.
+                    Created a function similar to render_dungeon() but it prints out monster symbol called render_dungeon_mon()
+
+3/3/25 4:00 PM:     Started my dungeon_turns() function which uses the priority queue to create the game loop.
+                    Created character_cmp() which is a comparator for the heap based on next_turn and with the seq_num as a tie breaker.
+                    Initialized dungeon_turns() so that all characters are inserted into heap, PC prints out the dungeon, and the game loop runs (with no monster or PC behavior yet).
+
+3/3/25 8:30 PM:     Started monster behavior with a in_room(pair_t pos) function that returns which room a given coordinate is in.
+                    Created logic for monster to determine where it thinks/knows the PC is located given TELEPATHIC and/or SMART and/or neither.
+                    Debugged dungeon_turns() with problems with the PC struct being in the character table, so I keep it out although.
+
+3/4/25 2:00 PM      Implemented bresendam_next_step(pair_t from, pair_t to, pair_t *next) for not-SMART monsters to determine there next movement based on where it wants to go.
+                    Started logic to handle outcomes of monster movement (simple step, killing a monster, killing the PC, hitting a wall).
+                    Implemented functions smart_next_step(d, ((monster_t *)c)->position, ((monster_t *)c)->pc_position, &next_move) and smart_next_step_tunnel(same parameters) that use the dijkstra distance maps to determine monster movements
+                    Debugged dungeon_turns() with it crashing/freezing sometimes when a monster kills another monster and fixed with change to how I was freeing monster structs
+
+3/4/25 6:00 PM      Implemented TUNNELING functionality for next steps that hit a wall. This was the last major piece in monster behavior
+                    Implemented pc_next_step() which will control the PC movements to travel toward the nearest corner of the dungeon.
+
+3/5/25 12:30 PM     Removed debug statements and properly ordered the terminal outputs
+                    Wrote some documentation.
+                    Created render_gameover() and render_game_win() which print big "GAME OVER" or "WINNER" to the terminal upon losing/winning the game.
+
+3/5/25 5:30 PM      Wrote the README for submission.
+
+                    
+                    
+3/24/25 6:00 PM:    Started assignment 1.05 (hw5)
+                    Started hw5 by downloading the post-hw4 code the professor sent out.
+                    Added the initialization and setup of ncurses in rlg327.c main() and by default remving the delay between events.
+                    Created a function just like render_dungeon() but it uses ncurses to print the dungeon map/characters and named it render_dungeon_ncurses().
+                    Created a function called render_cell_ncurses() which updates a single specified cell of the dungeon map.
+                    I modified the move_character() to not just update the character map, but also update the dungeon output using the render_cell_ncurses() defined above.
+                    Tested and debugged, at this point all in-game printing is done with ncurses.
+
+3/25/25 3:00 PM:    Started PC control logic.
+                    Instead of the PC using the professor's pc_next_pos() to automate movement, I created pc_next_pos_input() which uses ncurses getch() to get input and then a switch statement to differential needed actions.
+                    I first implemented the simple one space movements and exit actions.
+                    I also modified do_moves() to validate PC movement, such as staying in rooms/hallways (no tunneling)
+                    Next I implemented the stair case functionality by deleting the dungeon (keeping PC in tmp variable), initialize/generating a new dungeon, reassigning the PC, generating monsters, and reprinting the dungeon map.
+
+3/25/25 7:00 PM:    Started the monster list.
+                    Created a scroll_monster_list(dungeon_t *d, int *scroll_offset) which will print the monster information from left to right, top to bottom on the map starting with the monster indicated by the scroll offset variable and ending with the last monster or the bottom of the terminal.
+                    Created a display_monster_list() that is called when a user presses 'm', it clears the screen and calls scroll_monster_list() defined above to print the monster list then waits for user input, such as scrolling (updates the scroll offset variable accordingly), escape (returns to dungeon map), or Exit.
+                    I thought I had some small output/printing bugs, but I figured out it was just vscode and/or pyrite lagging which was causing the issues as I was not able to replicate them the next day. I've experienced these issues with vscode/pyrite while working on previous homeworks as well.
+
+3/26/25 3:00 PM     Cleaned up the code a bit, added some documentation, and created the README for submission.
+
+
+
+4/2/25 1:00 PM:     Started assignment 1.06 (hw6).
+                    Started hw6 by downloading the post-hw5 code the professor sent out.
+                    Started with the conversion to C++.
+                    Modified the Makefile and added in a bunch of casts.
+                    Converted the dungeon, character, npc, and pc structs into classes, where character is the parent of npc and pc. 
+                    Also removed the pc pointer in character (not needed anymore), but left the npc pointer and malloc it during monster_gen, though it is never used, because I found it to be the best way to determine if a certain character instance needed to be freed. I would always have double free errors every other way I tried to implement the character_delete().
+                    Moved all of the defined functions in the header files of dungeon, character, npc, and pc in there respective classes.
+                    
+4/2/25 4:00 PM      Declared all monsters to be characters but instantiated them as npcs for inheritance. Did the same thing for the PC.
+                    With the changes to npc and pc, had to change the way functions interacted with them in a bunch of spots throughout the code.
+                    C++ conversion is done and it is running as it should.
+
+4/2/25 10:30 PM     Start fog of war implemenation
+                    Creating terrain_type_t map_seen[DUNGEON_Y][DUNGEON_X] in dungeon.h. 
+                    By default all cells are filled with immutable rock (" ") so the dungeon looks completely dark, happens in place_pc. 
+                    After every PC movement, the actual terrain in 5 by 5 region around the PC is updated in map_seen. 
+                    Create io_display_dark() in io.cpp which is similar to the professor"s io_display() but changed to fog of war details using the map_seen map.
+                    Modified so only monsters in the 5 by 5 region are printed.
+                    The "f" key prints the original io_display() therfore printing the entire map, then on the next turn fog of war will reactivate.
+
+4/2/25 10:00 AM     Started the teleporting cheat when the user presses 'g'.
+                    Professor gave an function to teleport to a random location, which is now called when the user presses 'g' then 'r'.
+                    Created io_teleport_pc() in io.cpp which handles the entire teleporting process, it is similar to io_handle_input(), but only supports actions for teleporting.
+                    Much like normal movement calls given move_pc(), moving the teleporting target pointer will call a similar funciton move_pc_teleport() in move.cpp.
+                    move_pc_teleport() updates the PC location and reprints the dungeon with io_display_teleport() in io.cpp, a modified io_display to display the targeting pointer, "*".
+                    
+4/2/25 2:00 PM      When user presses 'g' for the second time, the created teleport_pc() in move.cpp is called. It fully updates the PC location and character map, killing a monster if needed, updates the light radius around the PC, and recalls dijkstra distance maps.
+                    Cleaned up the code a bit, added some documentation, and created the README for submission.
+
+
+
