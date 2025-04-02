@@ -1,0 +1,22 @@
+
+C to C++
+
+    change .c to .cpp
+    use g++
+    C allows imexplicit casts, C++ doesn't
+    a few hours
+    look at output of compiler error, it will tell how to cast stuff
+
+Fog of War
+
+    haven't seen it, don't know it
+    can only see light radius and previously seen stuff
+    could make it to see entire rooms when in rooms
+        or change light radius
+    can see monster in light radius, but cannot see monsters in previously seen dungeon far away
+    updates (by tunnelers) in previously seen dungeon spaces are not updated until seen again
+    implementation
+        explored flag dungeon map
+        use a message queue to print when you want to print
+
+
