@@ -1,0 +1,20 @@
+there is monster_desc.txt and object_desc.txt that need to be parsed
+
+object_desc.txt parser is given
+must parse monster_desc.txt
+    10 fields of data
+    have fields have dice element for randomness
+parsing object_desc.txt
+    similar format to monster fields
+
+parsing
+    std::strings s; a more functionality string class
+    #include <ifstream>
+        ifstream i;
+        i.open(FILE)
+        i.peek()
+        i.getline(s, int size) // size = 77
+        std::getline(&i, &s, char delim)
+        operator>>() to read individual words
+        stringstream 
+        

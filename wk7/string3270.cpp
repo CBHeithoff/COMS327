@@ -1,6 +1,20 @@
 
 #include "string3270.h"
 
+// std::exception class in <excpetion>
+// exception exports an abstract method const char *what()
+// If you extend exception, you must implement what()
+// Uncaught excepts are caught by the runtime after the stack unwinds past main.
+// The runtime prints the string returned by what().
+//
+// In C++ *anything* can be used as an exception! Catch by type.
+//
+// In C, the compiler defines a macro every time it compiles a 
+// function: __FUNCTION__ . This macro contains the function name as a const char *
+// C++ also implements __FUNCTION__; however, function overloading makes this 
+// potentially ambiguious. So C++ introduces ++PRETTY_FUNCTION__ , which 
+// contains the entire function signature.
+// 
  
 string3270::string3270()
 {
@@ -11,18 +25,30 @@ string3270::string3270()
     // str[0] = '\0';
 
     // one line implemenation
-    str = strdup("");
+    // str = strdup("");
+
+    if(!(str = strdup(""))){
+        throw __PRETTY_FUNCTION__;
+    }
 
 }
 
 string3270::string3270(const char *s)
 {
-    str = strdup(s);
+    // str = strdup(s);
+
+    if(!(str = strdup(s))){
+        throw __PRETTY_FUNCTION__;
+    }
 }
 
 string3270::string3270(const string3270 &s)
 {
-    str = strdup(s.str);
+    // str = strdup(s.str);
+
+    if(!(str = strdup(s.str))){
+        throw __PRETTY_FUNCTION__;
+    }
 }
 
 string3270::~string3270()
@@ -65,7 +91,10 @@ bool string3270::operator<(const string3270 &s) const
 string3270 &string3270::operator=(const string3270 &s)
 {
     free(str);
-    str = strdup(s.str);
+    // str = strdup(s.str);
+    if(!(str = strdup(s.str))){
+        throw __PRETTY_FUNCTION__;
+    }
 
     // compiler handles the creation of the reference
     return *this;
@@ -74,7 +103,10 @@ string3270 &string3270::operator=(const string3270 &s)
 string3270 &string3270::operator=(const char *s)
 {
     free(str);
-    str = strdup(s);
+    // str = strdup(s);
+    if(!(str = strdup(s))){
+        throw __PRETTY_FUNCTION__;
+    }
 
     return *this;
 }
@@ -86,7 +118,8 @@ string3270 &string3270::operator+=(const string3270 &s)
     // copies str into space allocated until all copied over or runs out of space
     if (!(tmp = (char *) realloc(str, strlen(str) + strlen(s.str) + 1))) {
         // never exit in a library. Use exception handling.
-        exit(-1);
+        //exit(-1);
+        throw __PRETTY_FUNCTION__;
     }
     
     str = tmp;
@@ -103,7 +136,8 @@ string3270 &string3270::operator+=(const char *s)
     // copies str into space allocated until all copied over or runs out of space
     if (!(tmp = (char *) realloc(str, strlen(str) + strlen(s) + 1))) {
         // never exit in a library. Use exception handling.
-        exit(-1);
+        //exit(-1);
+        throw __PRETTY_FUNCTION__;
     }
     
     str = tmp;
@@ -122,7 +156,9 @@ string3270 string3270::operator+(const string3270 &s) const
     string3270 tmp; // using default constructor
 
     free(tmp.str);
-    tmp.str = (char *) malloc(strlen(str) + strlen(s.str) + 1);
+    if (!(tmp.str = (char *) malloc(strlen(str) + strlen(s.str) + 1))){
+        throw __PRETTY_FUNCTION__;
+    }
     strcpy(stpcpy(tmp.str, str), s.str);
 
     return tmp;
@@ -134,13 +170,15 @@ string3270 string3270::operator+(const char *s) const
     string3270 tmp; // using default constructor
 
     free(tmp.str);
-    tmp.str = (char *) malloc(strlen(str) + strlen(s) + 1);
+    if (!(tmp.str = (char *) malloc(strlen(str) + strlen(s) + 1))){
+        throw __PRETTY_FUNCTION__;
+    }
     strcpy(stpcpy(tmp.str, str), s);
 
     return tmp;
 }
 
-int string3270::length()
+int string3270::length() const
 {
     return strlen(str);
 }
@@ -152,8 +190,16 @@ s[0] = 'b';         //needs char & so this compiles
 cout << s << endl;  // needs char & so actuall string is modified
 */
 
-char &string3270::operator[](int i)
+// "throw" after const would mean its not going to throw an exception
+// "noexcept" does the same as "throw"
+// throw (const char *) to mean throwing a const char *
+char &string3270::operator[](int i) const
 {
+    // >= to not index the null byte
+    if(i >= strlen(str)){
+        throw __PRETTY_FUNCTION__;
+    }
+    
     return str[i]; // needs exception handling
 }
 
@@ -168,7 +214,9 @@ const char *string3270::c_str() const
 std::istream &operator>>(std::istream &i, const string3270 &s)
 {
     free(s.str);
-    s.str = (char *) malloc(80); // real way would scan to find the end
+    if (!(s.str = (char *) malloc(80))){ // real way would scan to find the end
+        throw __PRETTY_FUNCTION__;
+    }
 
     return i.getline(s.str, 80, '\n');
 }

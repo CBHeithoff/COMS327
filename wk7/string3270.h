@@ -43,7 +43,7 @@ class string3270 {
         string3270 operator+(const string3270 &s) const;
         string3270 operator+(const char *s) const;
 
-        int length();
+        int length() const;
         // indexing
         char &operator[](int i) const;
         const char *c_str() const;  // const at end of function signature says that 'this' is constant

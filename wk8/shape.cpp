@@ -81,6 +81,8 @@ ostream &operator<<(ostream &o, const shape &s)
 
 int main(int argc, char *argv[])
 {
+    // can compiler C++ with gcc with -lstg++ to link in C++ libraries
+
     rectangle r(5, 8);
 
     cout << r << endl;
@@ -141,8 +143,18 @@ int main(int argc, char *argv[])
     //     cout << (*vi)->area() << endl;
     // }
 
+    // dynamic_cast<type>(object)
+    // if object is dynamically type, return object cast to type
+    // else return NULL
+    circle *c; 
     for (vi = vsp.begin(); vi != vsp.end(); vi++){
-        cout << ((circle *) (*vi))->circumference() << endl; // compiles but crashes in runtime
+        //cout << ((circle *) (*vi))->circumference() << endl; // compiles but crashes in runtime
+        // only want to call it if shape is a circle
+        // dynamic_cast<type>(object) <= must be polygraphically related otherwise compile error
+        // static cast ex: (circle *)
+        if ((c = dynamic_cast<circle *>(*vi))){
+            cout << **vi << ": " << c->circumference() << endl;
+        }
     }
 
     return 0;

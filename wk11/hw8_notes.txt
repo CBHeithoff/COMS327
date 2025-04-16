@@ -1,0 +1,8 @@
+
+have vector of monster types
+when generating, roll dice
+    not attack dice, that happens in-game
+represent objects on dungeon floor
+    print monsters
+    else print objects
+    else print terrain

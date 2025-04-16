@@ -44,7 +44,12 @@
         "xutility": "cpp",
         "string": "cpp",
         "stdlib.h": "c",
-        "vector": "cpp"
+        "vector": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp",
+        "xhash": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
