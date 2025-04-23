@@ -25,6 +25,16 @@ f1ptr f0()
     return f1;
 }
 
+class function {
+    public:
+        function &operator()()
+        {
+            cout << __PRETTY_FUNCTION__ << endl;
+
+            return *this;
+        }
+};
+
 int main(int argc, char *argv[])
 {
     // able to do f0()()()()()()()()()(); with arbitary amount of ()
@@ -32,6 +42,10 @@ int main(int argc, char *argv[])
     // in C++ can overload function and do it with arbitary amount
 
     f0()()();
+
+    function f;
+
+    f()()();
 
     return 0;
 }
