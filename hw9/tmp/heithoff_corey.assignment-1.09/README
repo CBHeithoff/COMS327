@@ -1,0 +1,17 @@
+Assignment 1.09 involves adding commands to manage PC inventory and equipment space. Also combat is updated to reflect equipment use and defined hitpoints. The codebase for hw 1.09 is built on the post-hw 1.08 code drop from the professor. Only change in rlg327.cpp is game loop ends when a monster with BOSS ability (Sponge Bob) is killed. I did not modify the Makefile, so the execution is: "make" THEN "./rlg327" with any desired flag from previous weeks.
+
+Created an inventory for characters, defined as an array of ten object pointers. Created an equipment space for the PC, defined as an array of twelve object pointers in the PC class. PC automatically picks up objects from dungeon floor. Used professor's io_list_monsters_display() in io.cpp as an outline to create function to list PC inventory on 'i' command called io_inventory() in io.cpp. Created io_equipment() in io.cpp to list equipment to terminal (very similar to io_inventory()) on 'e' command. The other new commands use functions in io.cpp to prompt for input, helper functions in pc.cpp, and ESC to cancel/exit as described below:
+    (1) 'w' uses io_inventory_wear() get input and wear_inventory_item(d, index) which moves/swaps an item from inventory to proper equipment slot and tracks bonus speed with update_equipment_bonus()
+    (2) 'd' uses io_inventory_drop() get input and drop_inventory_item(d, index) which places an item from inventory to the floor and into stack of items if needed.
+    (3) 'x' uses io_inventory_expunge() get input and expunge_inventory_item(d, index) which permanently removes an item from inventory by setting an expunged flag in the proper monster description instance to preventing it from being regenerated.
+    (4) 't' uses io_equipment_take_off() get input and take_off_equipment_item(d, index) which unequips an item and moves it into the first available inventory space (if no space, the item remains equipped).
+    (5) 'I' uses io_inventory_inspect() get input and inspect_item(d, index) in io.cpp which using istringstream to print out item description. 
+    (6) 'L', inspect monster, performs exactly like teleport but waits for 't' to print the description of monster at that cell (if exists).
+
+Monster's with PICKUP and DESTORY abilities are attempted after every move in move_character() in move.cpp. Combat updates in a function called do_better_combat(dungeon *d, character *atk, character *def) which replaced the professor's do_combat() in move.cpp. In do_better_combat():
+    (1) If both atk and def are monsters, no damage is done, rather the def is displaced or swapped.
+    (2) If PC is def, the monster attack dice is rolled and subtracts PC hp. If PC hp falls to 0 or lower, death message in message queue is given, then game ends with tombstone screen.
+    (3) If PC is atk, the PC attach dice is rolled and summed with existing attack dice in equipment space and then monster hp is subtracted. If the monster hp falls to 0 or lower, its death is annouced in message queue and its removed from character map and if it had the PICKUP ability, the objects in its inventory are dropped.
+
+
+
