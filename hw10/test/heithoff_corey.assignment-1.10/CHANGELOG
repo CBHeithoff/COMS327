@@ -1,0 +1,29 @@
+
+4/27/25 2:00 PM:    Started assignment 1.10 (hw10).
+                    Started hw10 by downloading the post-hw9 code the professor sent out.
+                    I decided to extend the rogue-like dungeon game.
+                    Implemented dodge, defense, weight, and value item attributes (in do_combat() in move.cpp). 
+                        (1) Dodge is a chance to not take damage from an emeny attack. 
+                        (2) Defense reduces the amount of damage from an enemy attack. Dodge and defence are handled in do_combat() in move.cpp. 
+                        (3) Weight of items in a PC equipment space and inventory will reduce PC speed.
+                        (4) Value of items decide how much Gold the item can be bought and sold for.
+
+4/28/25 1:00 PM     I made the dungeon have 10 defined levels/floor designs, so the map of a dungeon level (rooms and corridors) will remain the same even if you leave the floor and come back to it later (monsters, loot, and special terrain areas will still be random). 
+                    Most of this implementation of level control is in new_dungeon() in dungeon.cpp.
+                    More powerful monsters spawn as the PC goes down in the dungeon and easier monsters as you go up. "hard" monsters either have a lot of health or damage. (logic in generate_monster() in descriptions.cpp.)
+                    The 6th level of the dungeon spawns all software bug monsters (because they are annoying)
+
+4/29/25 3:00 PM     The PC spawns in a town on the surface (dungeon level = 0) with four shops, a magic shop, weapons shop, armory, and merchant. 
+                    Interacting with a shop is done by moving to the "+" symbol at the shop enterance and pressing '+'. 
+                    All items can be found in the dungeon or bought in the shop with gold (artifact rules still apply). Gold can be obtained by defeating monsters or sell items to the merchant. 
+                    PC health, gold, and the dungeon level can be seen by pressing "c".
+
+5/5/25 12:30 PM     Implemenated special types of terrain areas in the dungeon starting at level 3 and below at a rate of 3-5 special terrain areas per floor. 
+                    Special terrain generation is handled in gen_special_terrain() in dungeon.cpp. The special terrain types are the following:
+                        (1) Lava pits (red) (width=5): subtract 25 hp every time the PC steps on them.
+                        (2) Quicksand (yellow) (width=5): divides speed in half while inside.
+                        (3) Vines (green) (width=5): divides speed in half while inside.
+                        (4) Healing pools (blue) (width=3): adds 10 hp (capped by PC starting health value) on every step.
+                        (5) teleporting tiles (purple) (width=1): there are two teleporting tiles and stepping on one with transport you to the other (or attack if a monster is on the other tile).
+
+

@@ -1,0 +1,6 @@
+pthread.h
+
+create
+    pthread_create(id, attribute, function pointer, pointer to parameter to pass in)
+    use: pthread_create(id, NULL, subroutine, struct)
+

@@ -1,0 +1,65 @@
+books by Steven
+    advanced programming in UNIX environment
+    UNIX and networking
+
+hackers & real genius
+
+
+--------------------------------------------------------
+
+networking
+
+echo function to test network connectivity
+
+
+SERVER SOCKET SETUP
+
+SOCKETS: socket(domain, type, protcol)
+    creates socket for user to use to connect
+domains
+    AF_UNIX: local
+    AF_INET: old internet
+    AF_INET6: internet
+types
+    SOCK_STREAM: client and server both know everything was recieved (acknowledgement) (TCP used today ?)
+    SOCK_DGRAM: unreliable (old, disappearing) used in early internet with little bandwidth (UDP) used in sensers
+protcol
+    = 0
+
+error in socket, OS will wait to timeout (cannot restart socket right away)
+    setsocketopt(...)
+    error("setsockopt")
+
+bind()
+    connect server info with IP info
+
+listen()
+    sets up a queue for multi-user functionality
+
+accept()
+    pass in client struct to hold metadata
+    returns a new socket for user who are accepted/connected
+
+read()/write()
+    handle user 
+
+
+
+CLIENT SOCKET SETUP
+
+socket()
+    create socket
+    create meta-data struct
+
+connect()
+    to server
+
+get user input to send to server
+
+--------------------------------------------------------
+
+chat server
+
+select()
+    also used for high-resolution timer
+

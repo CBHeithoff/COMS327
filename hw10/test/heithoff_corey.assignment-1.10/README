@@ -1,0 +1,19 @@
+For assignment 1.10, I decided to extend the rogue-like dungeon game.  My codebase for hw 1.10 is built on the post-hw 1.09 code drop from the professor. I did not modify the Makefile, so the execution is: "make" THEN "./rlg327".
+
+The functionalities I added include making dodge, defense, and weight item attributes meaningful. Dodge is a chance to not take damage from an emeny attack and defense reduces the amount of damage from an enemy attack. Dodge and defence are handled in do_combat() in move.cpp. The total weight of items in a PC equipment space and inventory will reduce PC speed. My implementation of weight balances the game since you can no longer grab Mjolnir and win the game easily (Mjolnir weights a lot). The full stats of items can be seen when items are inspected with 'I'.
+
+I made the dungeon have 10 defined levels and floor designs, meaning the map of a dungeon level (rooms and corridors) will remain the same even if you leave the floor and come back to it later. While the floor maps remain the same, monsters, loot, and special terrain areas will be generated randomly every time. Most of this implementation of level control is in new_dungeon() in dungeon.cpp.
+
+I made more powerful monsters spawn as the PC goes down in the dungeon and easier monsters as you go up. The definition of a "hard" monster is either a lot of health or damage. Dungeon monster spawning manipulation is handled in generate_monster() in descriptions.cpp. I have been annoyed by the "software bug" monsters all semester how they are so fast and surround you while trying to debug, so I wanted players to experience this annoyance too, so I made the 6th level of the dungeon spawn all software bug monsters (or the similar hardware bug monster).
+
+The PC will initially spawn in a town on the surface (dungeon level = 0). The town has four shops, a magic shop, weapons shop, armory, and merchant. Interacting with a shop is done by moving to the "+" symbol at the shop enterance and pressing '+' (code for each shop is in io.cpp). The interface to buy an item in a shop is similar to how you equip/drop items in PC inventory (logic code for buying is in object.cpp). All items can be found in the dungeon or bought in the shop with gold (artifact rules still apply). Gold can be obtained by defeating monsters or sell items to the merchant. The same input handler is used for the town, there are just no monsters or items spawned. PC health, gold, and the dungeon level can be seen by pressing 'c'. The dungeon can be entered with the downward stair at the middle house in the town.
+
+I made the special types of terrain spawn in the dungeon starting at level 3 and below at a rate of 3-5 special terrain areas per floor and are indicated by colored floor. Special terrain generation is handled in gen_special_terrain() in dungeon.cpp and the effects on the PC are in terrain_eff() in pc.cpp. The special terrain types are the following:
+    (1) Lava pits (red) (width=5): subtract 25 hp every time the PC steps on them.
+    (2) Quicksand (yellow) (width=5): divides speed in half while inside.
+    (3) Vines (green) (width=5): divides speed in half while inside.
+    (4) Healing pools (blue) (width=3): adds 10 hp (capped by PC starting health value) on every step.
+    (5) teleporting tiles (purple) (width=1): there are two teleporting tiles and stepping on one with transport you to the other (or attack if a monster is on the other tile).
+
+
+
